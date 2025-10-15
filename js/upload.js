@@ -108,6 +108,7 @@ function displayFileInfo(file) {
     const fileName = document.getElementById('fileName');
     const fileSize = document.getElementById('fileSize');
     const uploadZone = document.getElementById('uploadZone');
+    const formatSpan = document.getElementById('detectedFormat');
     
     // Validate file size (max 10MB for Phase 1)
     const maxSize = 10 * 1024 * 1024; // 10MB in bytes
@@ -123,6 +124,34 @@ function displayFileInfo(file) {
     // Show file info section and hide upload zone
     uploadZone.style.display = 'none';
     fileInfo.style.display = 'block';
+    
+    // Detect format by reading first few lines
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const preview = e.target.result;
+        let format = 'Unknown';
+        
+        if (typeof detectLogFormat === 'function') {
+            format = detectLogFormat(preview);
+        }
+        
+        const formatNames = {
+            'apache': 'Apache/Nginx',
+            'nginx': 'Apache/Nginx',
+            'json': 'JSON Logs',
+            'w3c': 'W3C Extended',
+            'syslog': 'Syslog',
+            'iis': 'IIS',
+            'unknown': 'Unknown (will use AI if key provided)'
+        };
+        
+        formatSpan.textContent = formatNames[format] || format;
+        formatSpan.style.color = format === 'unknown' ? 'var(--warning-color)' : 'var(--accent-blue)';
+    };
+    
+    // Read first 1KB to detect format
+    const blob = file.slice(0, 1024);
+    reader.readAsText(blob);
 }
 
 /**
@@ -138,9 +167,9 @@ function formatFileSize(bytes) {
 
 /**
  * Process the uploaded file
- * Reads file, parses it, analyzes it, and redirects to results
+ * Reads file, parses it (with universal parser), analyzes it, and redirects to results
  */
-function processFile() {
+async function processFile() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
     
@@ -148,6 +177,10 @@ function processFile() {
         alert('❌ Please select a file first');
         return;
     }
+    
+    // Get API key if provided
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const apiKey = apiKeyInput ? apiKeyInput.value.trim() : null;
     
     // Show loading spinner
     const fileInfo = document.getElementById('fileInfo');
@@ -158,17 +191,25 @@ function processFile() {
     // Use FileReader to read the file
     const reader = new FileReader();
     
-    reader.onload = function(e) {
+    reader.onload = async function(e) {
         try {
             const logContent = e.target.result;
             
             console.log('📄 File read successfully, starting analysis...');
             
-            // Step 1: Parse the log file
-            const parsedEntries = parseLog(logContent);
+            // Step 1: Parse the log file (try universal parser first)
+            let parsedEntries = [];
+            
+            if (typeof parseLogUniversal === 'function') {
+                console.log('🌐 Using universal parser...');
+                parsedEntries = await parseLogUniversal(logContent, apiKey);
+            } else {
+                console.log('📝 Using standard parser...');
+                parsedEntries = parseLog(logContent);
+            }
             
             if (parsedEntries.length === 0) {
-                alert('❌ No valid log entries found in the file. Please check the log format.');
+                alert('❌ No valid log entries found in the file. Please check the log format or provide an OpenAI API key for unknown formats.');
                 resetUploadUI();
                 return;
             }
@@ -190,7 +231,7 @@ function processFile() {
             };
             
             sessionStorage.setItem('results', JSON.stringify(results));
-            sessionStorage.setItem('dataVersion', '1.0.1');
+            sessionStorage.setItem('dataVersion', '1.0.3');
             
             // Step 4: Redirect to results page
             console.log('✅ Analysis complete, redirecting to results...');

@@ -7,9 +7,10 @@ A web-based log analysis tool that automatically detects security anomalies in l
 ## 🎯 Features
 
 - **🔐 Simple Authentication** - Secure login system
-- **📤 File Upload** - Drag-and-drop or click to upload `.log` or `.txt` files
-- **🧠 AI-Powered Anomaly Detection** - 6 rule-based detection patterns
-- **📊 Visual Timeline** - See events and anomalies chronologically
+- **📤 Universal File Upload** - Drag-and-drop any log format (Apache, Nginx, JSON, W3C, IIS, Syslog, or unknown)
+- **🌐 Multi-Format Parser** - Auto-detects and parses 5+ log formats out of the box
+- **🤖 AI-Powered Fallback** - Uses ChatGPT to parse unknown log formats (optional API key)
+- **🧠 Smart Anomaly Detection** - 6 rule-based detection patterns with confidence scores
 - **🎯 Confidence Scores** - Know how certain each detection is (0-100%)
 - **💡 Clear Explanations** - Understand exactly why something was flagged
 - **⚠️ Severity Levels** - Color-coded warnings vs critical issues
@@ -29,15 +30,18 @@ A web-based log analysis tool that automatically detects security anomalies in l
 ## 🛠️ Tech Stack
 
 - **Frontend:** HTML5 + CSS3 + Vanilla JavaScript
+- **Parser:** Universal log parser with 5+ format support
+- **AI Integration:** OpenAI GPT-3.5-turbo (optional, for unknown formats)
 - **Design:** Dark security theme with responsive layout
-- **Deployment:** Netlify (static hosting)
-- **Log Format:** Apache/Nginx Combined Log Format
+- **Deployment:** GitHub Pages / Netlify (static hosting)
+- **Log Formats:** Apache, Nginx, JSON, W3C, IIS, Syslog + AI fallback
 
 **Why Vanilla JS?**
 - ✅ Simple and explainable (no framework complexity)
 - ✅ Fast to build and deploy
 - ✅ Works in any browser
 - ✅ Easy for non-developers to understand
+- ✅ Client-side processing (privacy-first)
 
 ---
 

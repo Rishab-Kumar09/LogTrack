@@ -20,7 +20,7 @@
     <div class="upload-container">
         <div class="upload-card">
             <h1>Upload Log File for Analysis</h1>
-            <p class="subtitle">Upload Apache/Nginx log files to detect security anomalies</p>
+            <p class="subtitle">Upload any log format - Apache, Nginx, JSON, W3C, IIS, Syslog, or use AI for unknown formats</p>
             
             <div class="upload-zone" id="uploadZone">
                 <div class="upload-icon">📁</div>
@@ -30,7 +30,7 @@
                 <input 
                     type="file" 
                     id="fileInput" 
-                    accept=".log,.txt"
+                    accept=".log,.txt,.json"
                     style="display: none;"
                 >
             </div>
@@ -38,6 +38,27 @@
             <div id="fileInfo" class="file-info" style="display: none;">
                 <p>Selected: <strong id="fileName"></strong></p>
                 <p>Size: <span id="fileSize"></span></p>
+                <p>Format: <span id="detectedFormat" style="color: var(--accent-blue); font-weight: 600;">Detecting...</span></p>
+                
+                <!-- Optional API Key for unknown formats -->
+                <details style="margin: 15px 0;">
+                    <summary style="cursor: pointer; color: var(--text-muted); font-size: 0.9em;">
+                        🤖 Optional: OpenAI API Key (for unknown formats)
+                    </summary>
+                    <div style="margin-top: 10px;">
+                        <input 
+                            type="password" 
+                            id="apiKeyInput" 
+                            placeholder="sk-..." 
+                            style="width: 100%; padding: 10px; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 5px; font-family: monospace;"
+                        >
+                        <p style="font-size: 0.8em; color: var(--text-muted); margin-top: 5px;">
+                            If log format is not recognized, we'll use ChatGPT to parse it. Get your API key from 
+                            <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--accent-blue);">OpenAI</a>
+                        </p>
+                    </div>
+                </details>
+                
                 <button id="analyzeBtn" class="btn-primary btn-large">Analyze Log File</button>
             </div>
             
@@ -59,8 +80,9 @@
     
     <script src="js/auth.js?v=1.0.2"></script>
     <script src="js/parser.js?v=1.0.2"></script>
+    <script src="js/parser-universal.js?v=1.0.3"></script>
     <script src="js/analyzer.js?v=1.0.2"></script>
-    <script src="js/upload.js?v=1.0.2"></script>
+    <script src="js/upload.js?v=1.0.3"></script>
 </body>
 </html>
 

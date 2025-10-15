@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function displayResults() {
     // Clear old cached results (version check)
     const dataVersion = sessionStorage.getItem('dataVersion');
-    if (dataVersion !== '1.0.1') {
+    if (dataVersion !== '1.0.3') {
         console.log('🔄 Clearing old cached data...');
         sessionStorage.removeItem('results');
-        sessionStorage.setItem('dataVersion', '1.0.1');
+        sessionStorage.setItem('dataVersion', '1.0.3');
     }
     
     // Get results from sessionStorage
