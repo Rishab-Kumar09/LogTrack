@@ -1,6 +1,6 @@
 /**
  * display.js - Results Display
- * Renders analysis results: summary stats, timeline, anomaly cards, and event table
+ * Renders analysis results: summary stats, anomaly cards, and event table
  */
 
 // Run display function when page loads
@@ -164,85 +164,6 @@ function getAnomalyIcon(type) {
         'Rapid Sequential Requests': '⚡'
     };
     return icons[type] || '⚠️';
-}
-
-/**
- * Display timeline visualization
- * @param {Array} entries - Parsed log entries
- * @param {Array} anomalies - Detected anomalies
- */
-function displayTimeline(entries, anomalies) {
-    const timelineContainer = document.getElementById('timeline');
-    timelineContainer.innerHTML = '';
-    
-    if (entries.length === 0) {
-        timelineContainer.innerHTML = '<p>No events to display</p>';
-        return;
-    }
-    
-    // Sort entries by date
-    const sortedEntries = [...entries].sort((a, b) => a.date - b.date);
-    const startTime = sortedEntries[0].date;
-    const endTime = sortedEntries[sortedEntries.length - 1].date;
-    const duration = endTime - startTime;
-    
-    // Create timeline bar
-    const bar = document.createElement('div');
-    bar.className = 'timeline-bar';
-    
-    // Add time labels
-    const startLabel = document.createElement('div');
-    startLabel.style.position = 'absolute';
-    startLabel.style.left = '0';
-    startLabel.style.top = '50px';
-    startLabel.style.fontSize = '0.8rem';
-    startLabel.style.color = 'var(--text-secondary)';
-    startLabel.textContent = startTime.toLocaleTimeString();
-    
-    const endLabel = document.createElement('div');
-    endLabel.style.position = 'absolute';
-    endLabel.style.right = '0';
-    endLabel.style.top = '50px';
-    endLabel.style.fontSize = '0.8rem';
-    endLabel.style.color = 'var(--text-secondary)';
-    endLabel.textContent = endTime.toLocaleTimeString();
-    
-    // Add event markers (sample every Nth event to avoid clutter)
-    const sampleRate = Math.max(1, Math.floor(entries.length / 50));
-    sortedEntries.forEach((entry, index) => {
-        if (index % sampleRate === 0) {
-            const position = duration > 0 ? ((entry.date - startTime) / duration) * 100 : 50;
-            const marker = document.createElement('div');
-            marker.className = 'timeline-marker';
-            marker.style.left = `${position}%`;
-            marker.title = `${entry.timestamp} - ${entry.ip} - ${entry.method} ${entry.url}`;
-            bar.appendChild(marker);
-        }
-    });
-    
-    // Add anomaly markers
-    anomalies.forEach(anomaly => {
-        // Find a corresponding entry
-        let entry;
-        if (anomaly.ip) {
-            entry = sortedEntries.find(e => e.ip === anomaly.ip);
-        } else if (anomaly.hour !== undefined) {
-            entry = sortedEntries.find(e => e.hour === anomaly.hour);
-        }
-        
-        if (entry) {
-            const position = duration > 0 ? ((entry.date - startTime) / duration) * 100 : 50;
-            const marker = document.createElement('div');
-            marker.className = `timeline-marker anomaly ${anomaly.severity}`;
-            marker.style.left = `${position}%`;
-            marker.title = `⚠️ ${anomaly.type} (${anomaly.confidence}% confidence)`;
-            bar.appendChild(marker);
-        }
-    });
-    
-    timelineContainer.appendChild(bar);
-    timelineContainer.appendChild(startLabel);
-    timelineContainer.appendChild(endLabel);
 }
 
 /**
