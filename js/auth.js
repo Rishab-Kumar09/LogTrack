@@ -90,10 +90,7 @@ function displayUsername() {
  */
 function logout() {
     // Clear all session data
-    sessionStorage.removeItem('loggedIn');
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('loginTime');
-    sessionStorage.removeItem('results');
+    sessionStorage.clear();
     
     // Redirect to login page
     window.location.href = 'index.html';

@@ -12,6 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
  * Main display function - renders all results
  */
 function displayResults() {
+    // Clear old cached results (version check)
+    const dataVersion = sessionStorage.getItem('dataVersion');
+    if (dataVersion !== '1.0.1') {
+        console.log('🔄 Clearing old cached data...');
+        sessionStorage.removeItem('results');
+        sessionStorage.setItem('dataVersion', '1.0.1');
+    }
+    
     // Get results from sessionStorage
     const resultsJson = sessionStorage.getItem('results');
     

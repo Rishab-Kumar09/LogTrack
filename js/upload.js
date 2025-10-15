@@ -190,6 +190,7 @@ function processFile() {
             };
             
             sessionStorage.setItem('results', JSON.stringify(results));
+            sessionStorage.setItem('dataVersion', '1.0.1');
             
             // Step 4: Redirect to results page
             console.log('✅ Analysis complete, redirecting to results...');
