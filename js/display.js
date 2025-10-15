@@ -48,7 +48,6 @@ function displayResults() {
         // Display all sections
         displaySummary(parsed, anomalies);
         displayAnomalies(anomalies);
-        displayTimeline(parsed, anomalies);
         displayEventTable(parsed, anomalies);
         
     } catch (error) {
