@@ -1,0 +1,113 @@
+# LogTrace Project Rules
+
+## Project Context
+You are helping build **LogTrace** - a cybersecurity log analysis application that detects anomalies in log files and provides explainable results for SOC analysts.
+
+## Always Reference
+**PRIMARY DOCUMENTATION:** `PROJECT-GUIDE.md` - Contains complete specifications, checklist, code examples, and submission guidelines.
+
+Before answering ANY question about this project:
+1. Reference `PROJECT-GUIDE.md` for specs and architecture
+2. Follow the established patterns and conventions
+3. Keep code simple and explainable (non-coder should understand)
+
+## Tech Stack (DO NOT CHANGE)
+- Frontend: HTML + CSS + Vanilla JavaScript (NO frameworks like React/Vue)
+- Backend: Node.js + Express (minimal server)
+- Database: Supabase (PostgreSQL) - Phase 2 only
+- Log Format: Apache/Nginx Combined Log Format
+
+## Key Principles
+1. **Simplicity First** - Vanilla JS, no build tools, no framework magic
+2. **Explainable Logic** - Every function should have clear comments
+3. **Phased Approach** - Phase 1 (MVP) → Phase 2 (Database) → Phase 3 (Polish)
+4. **Rule-Based Detection** - Not ML, pattern-based anomaly detection with 6 rules
+
+## Project Structure
+```
+LogTrace/
+├── index.html          → Login page
+├── upload.html         → Upload page
+├── results.html        → Results page
+├── history.html        → (Phase 2) History page
+├── css/
+│   └── style.css       → All styling
+├── js/
+│   ├── auth.js         → Login/logout
+│   ├── upload.js       → File reading (FileReader)
+│   ├── parser.js       → Log parsing (regex)
+│   ├── analyzer.js     → Anomaly detection (THE CORE)
+│   ├── display.js      → Results rendering
+│   ├── supabase.js     → (Phase 2) DB connection
+│   └── storage.js      → (Phase 2) DB operations
+├── backend/
+│   └── server.js       → Express server
+└── examples/
+    └── *.log           → Test log files
+```
+
+## The 6 Anomaly Detection Rules (CORE LOGIC)
+1. **High Request Volume** - IP making 5x more requests than average
+2. **Multiple Failed Attempts** - 5+ failed requests (4xx/5xx) from one IP
+3. **Unusual Time Activity** - 50+ requests during 1-5 AM
+4. **Suspicious URL Access** - Access to /admin, /config, /.env, etc.
+5. **Large Data Transfer** - Downloads > 10MB
+6. **Rapid Sequential Requests** - 10+ requests in 10 seconds
+
+Each anomaly MUST have:
+- `type` (string)
+- `explanation` (plain English)
+- `confidence` (0-100)
+- `severity` ("warning" or "critical")
+
+## Coding Standards
+- **Comments Required** - Every function needs a comment explaining what it does
+- **Variable Names** - Descriptive, not abbreviated (e.g., `ipCounts` not `ipC`)
+- **Error Handling** - Always handle edge cases (empty files, invalid format, etc.)
+- **No External Libraries** - Keep dependencies minimal (express, @supabase/supabase-js only)
+
+## When User Asks For Help:
+1. Check `PROJECT-GUIDE.md` for the spec
+2. Follow the existing architecture
+3. Keep it simple (non-developer should be able to explain)
+4. Add clear comments to any code you write
+5. Stay within the tech stack (no React, no frameworks!)
+
+## Current Phase Tracking
+Check with user which phase they're on:
+- **Phase 1**: MVP without database (5 hours)
+- **Phase 2**: Add Supabase database (2 hours)
+- **Phase 3**: Polish and submission (1 hour)
+
+## Important Files to Reference
+- `PROJECT-GUIDE.md` - Complete specs (READ THIS FIRST!)
+- Part 2 of guide - Hour-by-hour checklist
+- Part 3 of guide - Detailed specifications
+- Part 4 of guide - Code examples
+
+## DO NOT:
+- ❌ Suggest using React, Vue, Next.js, or any framework
+- ❌ Suggest complex ML models (keep it rule-based)
+- ❌ Over-engineer solutions
+- ❌ Add dependencies without asking
+- ❌ Change the established architecture
+
+## DO:
+- ✅ Keep code simple and readable
+- ✅ Add comments explaining logic
+- ✅ Follow the patterns in PROJECT-GUIDE.md
+- ✅ Ask which phase user is on before suggesting changes
+- ✅ Reference specific sections of PROJECT-GUIDE.md
+- ✅ Help debug with console.log suggestions
+- ✅ Encourage testing with example log files
+
+## Emergency Reference
+**Project Goal:** Log file upload → Parse → Detect 6 types of anomalies → Display with explanations + confidence scores
+
+**Timeline:** 6-8 hours total
+**Required:** Code + README + Example logs + Video walkthrough
+
+---
+
+**Remember:** This is an assignment for a non-coder to present. Keep everything explainable and simple!
+

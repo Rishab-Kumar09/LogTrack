@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogTrack - Analysis Results</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <h2>🔒 LogTrack</h2>
+            <div class="nav-right">
+                <span id="currentUser" class="username"></span>
+                <button onclick="window.location.href='upload.html'" class="btn-secondary">New Analysis</button>
+                <button onclick="logout()" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="results-container">
+        <h1>📊 Analysis Results</h1>
+        
+        <!-- Summary Statistics -->
+        <div class="summary-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Events</div>
+                <div class="stat-value" id="total-events">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Unique IPs</div>
+                <div class="stat-value" id="unique-ips">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Time Range</div>
+                <div class="stat-value small" id="time-range">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Anomalies Found</div>
+                <div class="stat-value" id="anomaly-count">0</div>
+            </div>
+            <div class="stat-card critical-stat">
+                <div class="stat-label">Critical Issues</div>
+                <div class="stat-value" id="critical-count">0</div>
+            </div>
+            <div class="stat-card warning-stat">
+                <div class="stat-label">Warnings</div>
+                <div class="stat-value" id="warning-count">0</div>
+            </div>
+        </div>
+        
+        <!-- Timeline Section -->
+        <div class="section">
+            <h2>📅 Timeline</h2>
+            <div id="timeline" class="timeline-container"></div>
+        </div>
+        
+        <!-- Anomalies Section -->
+        <div class="section">
+            <h2>🚨 Detected Anomalies</h2>
+            <div id="anomaly-container" class="anomaly-grid"></div>
+        </div>
+        
+        <!-- Event Table Section (Optional - collapsed by default) -->
+        <div class="section">
+            <details>
+                <summary><h2 style="display: inline-block; cursor: pointer;">📋 Detailed Event Log</h2></summary>
+                <div id="event-table-container" class="table-container">
+                    <table id="event-table" class="event-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>IP Address</th>
+                                <th>Method</th>
+                                <th>URL</th>
+                                <th>Status</th>
+                                <th>Bytes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="event-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/display.js"></script>
+</body>
+</html>
+

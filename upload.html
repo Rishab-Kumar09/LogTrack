@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogTrack - Upload Log File</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <h2>🔒 LogTrack</h2>
+            <div class="nav-right">
+                <span id="currentUser" class="username"></span>
+                <button onclick="logout()" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="upload-container">
+        <div class="upload-card">
+            <h1>Upload Log File for Analysis</h1>
+            <p class="subtitle">Upload Apache/Nginx log files to detect security anomalies</p>
+            
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <p class="upload-text">Drag and drop your log file here</p>
+                <p class="upload-subtext">or</p>
+                <label for="fileInput" class="btn-primary">Choose File</label>
+                <input 
+                    type="file" 
+                    id="fileInput" 
+                    accept=".log,.txt"
+                    style="display: none;"
+                >
+            </div>
+            
+            <div id="fileInfo" class="file-info" style="display: none;">
+                <p>Selected: <strong id="fileName"></strong></p>
+                <p>Size: <span id="fileSize"></span></p>
+                <button id="analyzeBtn" class="btn-primary btn-large">Analyze Log File</button>
+            </div>
+            
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing log file...</p>
+            </div>
+            
+            <div class="example-files">
+                <h3>📂 Example Log Files:</h3>
+                <p>Try these sample files to see LogTrace in action:</p>
+                <ul>
+                    <li><a href="examples/sample-normal.log" download>sample-normal.log</a> - Clean log (no anomalies)</li>
+                    <li><a href="examples/sample-attacks.log" download>sample-attacks.log</a> - Log with attacks (5-6 anomalies)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/analyzer.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+</html>
+
