@@ -25,6 +25,13 @@ function displayResults() {
         const results = JSON.parse(resultsJson);
         const { parsed, anomalies } = results;
         
+        // Convert date strings back to Date objects
+        parsed.forEach(entry => {
+            if (typeof entry.date === 'string') {
+                entry.date = new Date(entry.date);
+            }
+        });
+        
         console.log('📊 Displaying results:', {
             entries: parsed.length,
             anomalies: anomalies.length
