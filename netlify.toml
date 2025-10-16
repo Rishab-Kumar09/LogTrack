@@ -1,0 +1,17 @@
+# Netlify Configuration for LogTrack Next.js App
+
+# Tell Netlify the app is in the logtrack-nextjs folder
+[build]
+  base = "logtrack-nextjs"
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirect all routes to Next.js
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
