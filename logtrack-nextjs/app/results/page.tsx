@@ -36,6 +36,8 @@ export default function ResultsPage() {
   const [results, setResults] = useState<Results | null>(null);
   const [criticalAnomalies, setCriticalAnomalies] = useState<Anomaly[]>([]);
   const [warningAnomalies, setWarningAnomalies] = useState<Anomaly[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const entriesPerPage = 100;
 
   useEffect(() => {
     // Check authentication
@@ -86,10 +88,16 @@ export default function ResultsPage() {
 
   // Calculate summary stats
   const uniqueIps = new Set(results.entries.map(e => e.ip)).size;
-  const sortedEntries = [...results.entries].sort((a, b) => a.date.getTime() - b.date.getTime());
+  const sortedEntries = [...results.entries].sort((a, b) => b.date.getTime() - a.date.getTime()); // Newest first
   const timeRange = sortedEntries.length > 0 
-    ? `${sortedEntries[0].date.toLocaleString()} - ${sortedEntries[sortedEntries.length - 1].date.toLocaleString()}`
+    ? `${sortedEntries[sortedEntries.length - 1].date.toLocaleString()} - ${sortedEntries[0].date.toLocaleString()}`
     : 'N/A';
+
+  // Pagination calculations
+  const totalPages = Math.ceil(sortedEntries.length / entriesPerPage);
+  const startIndex = (currentPage - 1) * entriesPerPage;
+  const endIndex = startIndex + entriesPerPage;
+  const paginatedEntries = sortedEntries.slice(startIndex, endIndex);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -208,8 +216,48 @@ export default function ResultsPage() {
         {/* Event Table */}
         <div className="bg-slate-800/50 backdrop-blur-lg rounded-lg border border-slate-700 overflow-hidden">
           <div className="p-4 border-b border-slate-700">
-            <h3 className="text-lg font-semibold text-white">Event Details</h3>
-            <p className="text-sm text-slate-400">Showing last 100 events</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">Event Details</h3>
+                <p className="text-sm text-slate-400">
+                  Showing {startIndex + 1}-{Math.min(endIndex, sortedEntries.length)} of {sortedEntries.length} events
+                </p>
+              </div>
+              {/* Pagination Controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+                >
+                  ← Prev
+                </button>
+                <span className="text-slate-300 text-sm px-3">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+                >
+                  Next →
+                </button>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+                >
+                  Last
+                </button>
+              </div>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -224,7 +272,7 @@ export default function ResultsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700">
-                {sortedEntries.slice(-100).reverse().map((entry, index) => (
+                {paginatedEntries.map((entry, index) => (
                   <tr key={index} className="hover:bg-slate-700/30 transition-colors">
                     <td className="px-4 py-3 text-sm text-slate-300 font-mono">
                       {entry.date.toLocaleTimeString()}
@@ -255,6 +303,45 @@ export default function ResultsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Bottom Pagination */}
+          <div className="p-4 border-t border-slate-700 flex items-center justify-between">
+            <p className="text-sm text-slate-400">
+              100 entries per page
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+              >
+                First
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+              >
+                ← Prev
+              </button>
+              <span className="text-slate-300 text-sm px-3">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+              >
+                Next →
+              </button>
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm rounded transition-colors"
+              >
+                Last
+              </button>
+            </div>
           </div>
         </div>
       </div>
