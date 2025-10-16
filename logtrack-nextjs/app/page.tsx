@@ -142,6 +142,19 @@ export default function LoginPage() {
               <p>👤 analyst / soc2024</p>
             </div>
           </div>
+
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center">
+            <p className="text-slate-400 text-sm">
+              Don't have an account?{' '}
+              <button
+                onClick={() => router.push('/signup')}
+                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+              >
+                Sign up here
+              </button>
+            </p>
+          </div>
         </div>
 
         {/* Footer */}

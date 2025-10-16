@@ -13,11 +13,19 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   process.env.SUPABASE_SERVICE_KEY || ''
 );
+
+/**
+ * Hash password to match signup hashing
+ */
+function hashPassword(password: string): string {
+  return crypto.createHash('sha256').update(password).digest('hex');
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,12 +38,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Hash the password to compare with stored hash
+    const hashedPassword = hashPassword(password);
+
     // Query database for user
     const { data: user, error } = await supabase
       .from('users')
       .select('*')
       .eq('username', username)
-      .eq('password', password) // In production, use hashed passwords!
+      .eq('password', hashedPassword)
       .single();
 
     if (error || !user) {
