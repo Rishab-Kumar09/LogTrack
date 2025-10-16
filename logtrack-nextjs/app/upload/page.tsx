@@ -176,7 +176,7 @@ export default function UploadPage() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/history')}
-                className="text-slate-300 hover:text-white transition-colors"
+                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm rounded-lg transition-colors"
               >
                 📊 History
               </button>
