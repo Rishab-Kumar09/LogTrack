@@ -103,6 +103,12 @@ export default function ResultsPage() {
             </div>
             <div className="flex items-center gap-4">
               <button
+                onClick={() => router.push('/history')}
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                📊 History
+              </button>
+              <button
                 onClick={handleNewAnalysis}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
               >

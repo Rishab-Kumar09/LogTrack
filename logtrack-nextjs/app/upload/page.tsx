@@ -174,6 +174,12 @@ export default function UploadPage() {
               <span className="text-xl font-bold text-white">LogTrack</span>
             </div>
             <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push('/history')}
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                📊 History
+              </button>
               <span className="text-sm text-slate-300">👤 {user.username}</span>
               <button
                 onClick={handleLogout}
