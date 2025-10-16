@@ -324,14 +324,76 @@ export default function UploadPage() {
         <div className="mt-8 bg-slate-800/30 rounded-lg p-6 border border-slate-700">
           <h3 className="text-lg font-semibold text-white mb-3">📂 Need test files?</h3>
           <p className="text-sm text-slate-300 mb-3">
-            We provide sample log files in the <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">examples/</code> folder:
+            Download sample log files to test the analyzer:
           </p>
-          <ul className="text-sm text-slate-400 space-y-1">
-            <li>• <span className="text-slate-300">sample-normal.log</span> - Clean traffic (no anomalies)</li>
-            <li>• <span className="text-slate-300">sample-attacks.log</span> - Multiple attack patterns</li>
-            <li>• <span className="text-slate-300">brute-force-attack.log</span> - Login brute force</li>
-            <li>• <span className="text-slate-300">data-exfiltration.log</span> - Data theft scenario</li>
-          </ul>
+          <div className="grid gap-2">
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sample-normal.log"
+              download="sample-normal.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">sample-normal.log</span>
+                <span className="text-xs text-slate-500 ml-3">Clean traffic (no anomalies)</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sample-attacks.log"
+              download="sample-attacks.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">sample-attacks.log</span>
+                <span className="text-xs text-slate-500 ml-3">Multiple attack patterns</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/brute-force-attack.log"
+              download="brute-force-attack.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">brute-force-attack.log</span>
+                <span className="text-xs text-slate-500 ml-3">Login brute force scenario</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/data-exfiltration.log"
+              download="data-exfiltration.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">data-exfiltration.log</span>
+                <span className="text-xs text-slate-500 ml-3">Data theft scenario</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sql-injection-attack.log"
+              download="sql-injection-attack.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">sql-injection-attack.log</span>
+                <span className="text-xs text-slate-500 ml-3">SQL injection attempts</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+            <a
+              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/mixed-scenario.log"
+              download="mixed-scenario.log"
+              className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
+            >
+              <div>
+                <span className="text-slate-300 group-hover:text-white font-medium">mixed-scenario.log</span>
+                <span className="text-xs text-slate-500 ml-3">Combination of attacks</span>
+              </div>
+              <span className="text-blue-400">⬇️</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
