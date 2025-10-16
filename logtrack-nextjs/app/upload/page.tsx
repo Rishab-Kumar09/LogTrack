@@ -328,7 +328,7 @@ export default function UploadPage() {
           </p>
           <div className="grid gap-2">
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sample-normal.log"
+              href="/examples/sample-normal.log"
               download="sample-normal.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
@@ -339,7 +339,7 @@ export default function UploadPage() {
               <span className="text-blue-400">⬇️</span>
             </a>
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sample-attacks.log"
+              href="/examples/sample-attacks.log"
               download="sample-attacks.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
@@ -350,7 +350,7 @@ export default function UploadPage() {
               <span className="text-blue-400">⬇️</span>
             </a>
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/brute-force-attack.log"
+              href="/examples/brute-force-attack.log"
               download="brute-force-attack.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
@@ -361,7 +361,7 @@ export default function UploadPage() {
               <span className="text-blue-400">⬇️</span>
             </a>
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/data-exfiltration.log"
+              href="/examples/data-exfiltration.log"
               download="data-exfiltration.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
@@ -372,7 +372,7 @@ export default function UploadPage() {
               <span className="text-blue-400">⬇️</span>
             </a>
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/sql-injection-attack.log"
+              href="/examples/sql-injection-attack.log"
               download="sql-injection-attack.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
@@ -383,7 +383,7 @@ export default function UploadPage() {
               <span className="text-blue-400">⬇️</span>
             </a>
             <a
-              href="https://raw.githubusercontent.com/Rishab-Kumar09/LogTrack/main/logtrack-nextjs/examples/mixed-scenario.log"
+              href="/examples/mixed-scenario.log"
               download="mixed-scenario.log"
               className="flex items-center justify-between p-3 bg-slate-900/50 hover:bg-slate-900 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors group"
             >
