@@ -139,9 +139,12 @@ export default function HistoryPage() {
       <header className="bg-slate-800/50 backdrop-blur-lg border-b border-slate-700 sticky top-0 z-10">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <button 
+              onClick={() => router.push('/upload')}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <h1 className="text-2xl font-bold text-white">🔒 LogTrack</h1>
-            </div>
+            </button>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/upload')}

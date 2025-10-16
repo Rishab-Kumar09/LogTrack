@@ -169,10 +169,13 @@ export default function UploadPage() {
       <nav className="bg-slate-800/50 backdrop-blur-lg border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <button 
+              onClick={() => router.push('/upload')}
+              className="flex items-center hover:opacity-80 transition-opacity"
+            >
               <span className="text-2xl mr-2">🔒</span>
               <span className="text-xl font-bold text-white">LogTrack</span>
-            </div>
+            </button>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/history')}
