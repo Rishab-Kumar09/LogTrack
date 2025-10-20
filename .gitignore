@@ -40,3 +40,6 @@ lerna-debug.log*
 # Netlify
 .netlify
 
+# Interview prep files (personal)
+EXPLAIN-TO-INTERVIEWER.md
+logtrack-nextjs/EXPLAIN-TO-INTERVIEWER.md

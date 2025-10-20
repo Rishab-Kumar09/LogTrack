@@ -38,6 +38,9 @@ export default function ResultsPage() {
   const [warningAnomalies, setWarningAnomalies] = useState<Anomaly[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const entriesPerPage = 100;
+  const [aiSummary, setAiSummary] = useState<string>('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string>('');
 
   useEffect(() => {
     // Check authentication
@@ -82,6 +85,48 @@ export default function ResultsPage() {
   const handleNewAnalysis = () => {
     sessionStorage.removeItem('logtrack-results');
     router.push('/upload');
+  };
+
+  /**
+   * Generate AI Summary using ChatGPT
+   * Analyzes the detected anomalies and provides security insights
+   */
+  const generateAiSummary = async () => {
+    setAiLoading(true);
+    setAiError('');
+
+    try {
+      // Prepare anomaly summary for ChatGPT
+      const anomalySummary = {
+        total_entries: results?.entries.length || 0,
+        unique_ips: new Set(results?.entries.map(e => e.ip)).size || 0,
+        critical_issues: criticalAnomalies.length,
+        warnings: warningAnomalies.length,
+        anomaly_types: [...criticalAnomalies, ...warningAnomalies].map(a => ({
+          type: a.type,
+          severity: a.severity,
+          confidence: a.confidence
+        }))
+      };
+
+      const response = await fetch('/api/ai-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ anomalySummary })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setAiSummary(data.summary);
+      } else {
+        setAiError(data.error || 'Failed to generate AI summary');
+      }
+    } catch (error) {
+      setAiError('Network error. AI summary unavailable.');
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   if (!user || !results) return null;
@@ -212,6 +257,71 @@ export default function ResultsPage() {
             </div>
           </div>
         )}
+
+        {/* AI SECURITY SUMMARY - Collapsible */}
+        <div className="mb-8">
+          <details className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-lg rounded-lg border-2 border-purple-500/30">
+            <summary className="cursor-pointer p-4 font-semibold text-lg text-white hover:bg-purple-900/20 transition-colors flex items-center gap-3">
+              <span className="text-2xl">🤖</span>
+              <span>AI Security Analysis (Powered by ChatGPT)</span>
+              <span className="ml-auto text-sm text-purple-300">Click to expand</span>
+            </summary>
+            <div className="p-6 border-t border-purple-500/20">
+              {!aiSummary && !aiLoading && !aiError && (
+                <div className="text-center">
+                  <p className="text-slate-300 mb-4">
+                    Get an AI-powered analysis of your security findings
+                  </p>
+                  <button
+                    onClick={generateAiSummary}
+                    className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
+                  >
+                    🤖 Generate AI Summary
+                  </button>
+                  <p className="text-xs text-slate-400 mt-3">
+                    Uses OpenAI GPT-3.5-turbo to analyze anomaly patterns
+                  </p>
+                </div>
+              )}
+
+              {aiLoading && (
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-4 animate-pulse">🤖</div>
+                  <p className="text-slate-300">AI is analyzing your results...</p>
+                </div>
+              )}
+
+              {aiError && (
+                <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4 text-red-200">
+                  <p className="font-semibold">⚠️ AI Summary Unavailable</p>
+                  <p className="text-sm mt-2">{aiError}</p>
+                  <p className="text-xs mt-2 text-red-300">
+                    Note: Requires OPENAI_API_KEY to be configured
+                  </p>
+                </div>
+              )}
+
+              {aiSummary && (
+                <div className="bg-slate-900/50 rounded-lg p-4 border border-purple-500/20">
+                  <div className="flex items-start gap-3 mb-3">
+                    <span className="text-2xl">🤖</span>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-purple-300 mb-2">AI Security Insights:</h4>
+                      <div className="text-slate-200 whitespace-pre-wrap leading-relaxed">
+                        {aiSummary}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                    <p className="text-xs text-slate-400">
+                      💡 This analysis was generated by OpenAI GPT-3.5-turbo based on the detected anomaly patterns
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </details>
+        </div>
 
         {/* Event Table */}
         <div className="bg-slate-800/50 backdrop-blur-lg rounded-lg border border-slate-700 overflow-hidden">

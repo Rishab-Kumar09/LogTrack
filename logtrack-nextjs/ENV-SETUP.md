@@ -9,7 +9,7 @@ Create a `.env.local` file in the root directory with these variables:
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_KEY=your-service-role-key-here
 
-# OPENAI (Optional - only for unknown log formats)
+# OPENAI (Optional - for unknown log formats + AI summary feature)
 OPENAI_API_KEY=sk-your-key-here
 ```
 
@@ -26,6 +26,10 @@ OPENAI_API_KEY=sk-your-key-here
 1. Go to https://platform.openai.com/api-keys
 2. Click "Create new secret key"
 3. Copy the key → `OPENAI_API_KEY`
+
+**Used for:**
+- Parsing unknown log formats (fallback)
+- Generating AI security analysis summaries (ChatGPT-powered insights on results page)
 
 ## Database Setup:
 
