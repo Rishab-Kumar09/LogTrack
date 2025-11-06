@@ -40,6 +40,8 @@ export default function ResultsPage() {
   const entriesPerPage = 100;
   const [aiSummary, setAiSummary] = useState<string>('');
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiLoadingStep, setAiLoadingStep] = useState<string>('');
+  const [aiProgress, setAiProgress] = useState<number>(0);
   const [aiError, setAiError] = useState<string>('');
 
   useEffect(() => {
@@ -94,8 +96,14 @@ export default function ResultsPage() {
   const generateAiSummary = async () => {
     setAiLoading(true);
     setAiError('');
+    setAiProgress(0);
 
     try {
+      // Step 1: Preparing data
+      setAiLoadingStep('📊 Preparing analysis data...');
+      setAiProgress(20);
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Prepare anomaly summary for ChatGPT
       const anomalySummary = {
         total_entries: results?.entries.length || 0,
@@ -109,15 +117,30 @@ export default function ResultsPage() {
         }))
       };
 
+      // Step 2: Sending to AI
+      setAiLoadingStep('🤖 Sending to ChatGPT...');
+      setAiProgress(40);
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      // Step 3: Analyzing
+      setAiLoadingStep('🧠 AI analyzing patterns...');
+      setAiProgress(60);
+
       const response = await fetch('/api/ai-summary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ anomalySummary })
       });
 
+      setAiProgress(85);
       const data = await response.json();
 
       if (data.success) {
+        // Step 4: Finalizing
+        setAiLoadingStep('✅ Generating insights...');
+        setAiProgress(100);
+        await new Promise(resolve => setTimeout(resolve, 400));
+        
         setAiSummary(data.summary);
       } else {
         setAiError(data.error || 'Failed to generate AI summary');
@@ -455,6 +478,66 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
+
+      {/* AI Loading Overlay */}
+      {aiLoading && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-purple-700 shadow-2xl">
+            {/* Header */}
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-4 animate-pulse">
+                🤖
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">AI Analysis in Progress</h3>
+              <p className="text-slate-400 text-sm">
+                ChatGPT is analyzing your security findings...
+              </p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-6">
+              <div className="bg-slate-900 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 ease-out animate-pulse"
+                  style={{ width: `${aiProgress}%` }}
+                />
+              </div>
+              <div className="flex justify-between mt-2 text-xs text-slate-500">
+                <span>0%</span>
+                <span className="font-semibold text-purple-400">{aiProgress}%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            {/* Current Step */}
+            <div className="bg-slate-900/50 rounded-lg p-4 border border-purple-700/30">
+              <p className="text-white text-center font-medium">
+                {aiLoadingStep || 'Initializing...'}
+              </p>
+            </div>
+
+            {/* Steps Indicator */}
+            <div className="mt-6 space-y-2">
+              <div className={`flex items-center text-sm ${aiProgress >= 20 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{aiProgress >= 20 ? '✅' : '⏳'}</span>
+                <span>Preparing data</span>
+              </div>
+              <div className={`flex items-center text-sm ${aiProgress >= 40 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{aiProgress >= 40 ? '✅' : '⏳'}</span>
+                <span>Sending to ChatGPT</span>
+              </div>
+              <div className={`flex items-center text-sm ${aiProgress >= 60 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{aiProgress >= 60 ? '✅' : '⏳'}</span>
+                <span>AI analyzing patterns</span>
+              </div>
+              <div className={`flex items-center text-sm ${aiProgress >= 100 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{aiProgress >= 100 ? '✅' : '⏳'}</span>
+                <span>Generating insights</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

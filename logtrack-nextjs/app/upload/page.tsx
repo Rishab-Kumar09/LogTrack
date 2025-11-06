@@ -28,6 +28,8 @@ export default function UploadPage() {
   const [detectedFormat, setDetectedFormat] = useState<string>('');
   const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<string>('');
+  const [progress, setProgress] = useState<number>(0);
   const [dragActive, setDragActive] = useState(false);
 
   // Check if user is logged in
@@ -95,13 +97,32 @@ export default function UploadPage() {
     if (!file || !user) return;
 
     setLoading(true);
+    setProgress(0);
 
     try {
-      // Read file content
+      // Step 1: Reading file
+      setLoadingStep('📁 Reading log file...');
+      setProgress(10);
+      await new Promise(resolve => setTimeout(resolve, 800)); // Artificial delay
+
       const reader = new FileReader();
       reader.onload = async (e) => {
         const fileContent = e.target?.result as string;
 
+        // Step 2: Detecting format
+        setLoadingStep('🔍 Detecting log format...');
+        setProgress(25);
+        await new Promise(resolve => setTimeout(resolve, 600));
+
+        // Step 3: Parsing log entries
+        setLoadingStep('📊 Parsing log entries...');
+        setProgress(45);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Step 4: Running analysis
+        setLoadingStep('🚨 Running anomaly detection...');
+        setProgress(65);
+        
         // Send to backend for analysis
         const response = await fetch('/api/analyze', {
           method: 'POST',
@@ -114,9 +135,15 @@ export default function UploadPage() {
           })
         });
 
+        setProgress(85);
         const data = await response.json();
 
         if (data.success) {
+          // Step 5: Finalizing
+          setLoadingStep('✅ Analysis complete! Preparing results...');
+          setProgress(100);
+          await new Promise(resolve => setTimeout(resolve, 500));
+
           // Save results to storage
           sessionStorage.setItem('logtrack-results', JSON.stringify(data.data));
           
@@ -124,9 +151,8 @@ export default function UploadPage() {
           router.push('/results');
         } else {
           alert('❌ Analysis failed: ' + data.error);
+          setLoading(false);
         }
-        
-        setLoading(false);
       };
 
       reader.onerror = () => {
@@ -399,6 +425,70 @@ export default function UploadPage() {
           </div>
         </div>
       </div>
+
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-slate-700 shadow-2xl">
+            {/* Header */}
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-4 animate-bounce">
+                🔍
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Analyzing Log File</h3>
+              <p className="text-slate-400 text-sm">
+                Please wait while we process your data...
+              </p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-6">
+              <div className="bg-slate-900 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex justify-between mt-2 text-xs text-slate-500">
+                <span>0%</span>
+                <span className="font-semibold text-blue-400">{progress}%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            {/* Current Step */}
+            <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
+              <p className="text-white text-center font-medium">
+                {loadingStep || 'Initializing...'}
+              </p>
+            </div>
+
+            {/* Steps Indicator */}
+            <div className="mt-6 space-y-2">
+              <div className={`flex items-center text-sm ${progress >= 10 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{progress >= 10 ? '✅' : '⏳'}</span>
+                <span>Reading file</span>
+              </div>
+              <div className={`flex items-center text-sm ${progress >= 25 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{progress >= 25 ? '✅' : '⏳'}</span>
+                <span>Detecting format</span>
+              </div>
+              <div className={`flex items-center text-sm ${progress >= 45 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{progress >= 45 ? '✅' : '⏳'}</span>
+                <span>Parsing entries</span>
+              </div>
+              <div className={`flex items-center text-sm ${progress >= 65 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{progress >= 65 ? '✅' : '⏳'}</span>
+                <span>Running anomaly detection</span>
+              </div>
+              <div className={`flex items-center text-sm ${progress >= 100 ? 'text-green-400' : 'text-slate-600'}`}>
+                <span className="mr-2">{progress >= 100 ? '✅' : '⏳'}</span>
+                <span>Finalizing results</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
